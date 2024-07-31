@@ -5,7 +5,7 @@ dotenv.config();
 
 export const connect = (): void => {
   try {
-    const connectionString = process.env.CONNECT_STRING as string;
+    const connectionString = process.env.Mon as string;
 
     if (!connectionString) {
       throw new Error("CONNECTION_STRING is not defined in the environment variables.");

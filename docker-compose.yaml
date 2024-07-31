@@ -1,0 +1,63 @@
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  notification-service:
+    container_name: notification-service
+    build: ./notification-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+
+  user-service:
+    container_name: user-service
+    build: ./user-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017/user-se
+      RABBITMQ_URL: amqp://@rabbitmq:5672
+
+  chat-service:
+    container_name: chat-service
+    build: ./chat-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - rabbitmq
+      - mongodb
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      MONGODB_URL: mongodb://mongodb:27017/messages
+      SECRET_KEY: chatSecret
+  front-end:
+    container_name: frontend
+    build: ./fontend
+    ports:
+      - 5173:5173
+volumes:
+  rabbitmq_data:
+  mongo_data:

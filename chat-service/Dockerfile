@@ -8,9 +8,4 @@ RUN npm install --production
 
 COPY . .
 
-EXPOSE 3001
-
-ENV PORT=3001
-ENV CONNECT_STRING=mongodb://localhost:27017/messages
-
 CMD ["npm", "start"]
