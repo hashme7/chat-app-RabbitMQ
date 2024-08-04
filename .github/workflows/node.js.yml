@@ -18,14 +18,17 @@ jobs:
       run: ls -al
     - name: List files in chat-service directory
       run: ls -al chat-service
-    - name: Use Node.js 
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.16.0'
         cache: 'npm'
-    - run: cd chat-service && npm ci
-    - run: cd chat-service && npm run build --if-present
-    - run: cd chat-service && npm test
+    - name: Install Dependencies
+      run: cd chat-service && npm ci
+    - name: Build Project
+      run: cd chat-service && npm run build --if-present
+    - name: Run Tests
+      run: cd chat-service && npm test
 
   notification-service:
     runs-on: ubuntu-latest
@@ -35,14 +38,17 @@ jobs:
       run: ls -al
     - name: List files in notification-service directory
       run: ls -al notification-service
-    - name: Use Node.js 
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.16.0'
         cache: 'npm'
-    - run: cd notification-service && npm ci
-    - run: cd notification-service && npm run build --if-present
-    - run: cd notification-service && npm test
+    - name: Install Dependencies
+      run: cd notification-service && npm ci
+    - name: Build Project
+      run: cd notification-service && npm run build --if-present
+    - name: Run Tests
+      run: cd notification-service && npm test
 
   user-service:
     runs-on: ubuntu-latest
@@ -52,14 +58,17 @@ jobs:
       run: ls -al
     - name: List files in user-service directory
       run: ls -al user-service
-    - name: Use Node.js 
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.16.0'
         cache: 'npm'
-    - run: cd user-service && npm ci
-    - run: cd user-service && npm run build --if-present
-    - run: cd user-service && npm test
+    - name: Install Dependencies
+      run: cd user-service && npm ci
+    - name: Build Project
+      run: cd user-service && npm run build --if-present
+    - name: Run Tests
+      run: cd user-service && npm test
 
   frontend:
     runs-on: ubuntu-latest
@@ -74,12 +83,14 @@ jobs:
       with:
         node-version: '20.16.0'
         cache: 'npm'
-    - run: cd frontend && npm ci
-    - run: cd frontend && npm test
-    - run: cd frontend && npm run build
+    - name: Install Dependencies
+      run: cd frontend && npm ci
+    - name: Run Tests
+      run: cd frontend && npm test
+    - name: Build Project
+      run: cd frontend && npm run build
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: frontend-build
         path: frontend/build
-    
