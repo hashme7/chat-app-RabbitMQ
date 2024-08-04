@@ -10,8 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  chat-service:
     runs-on: ubuntu-latest
     
     steps:
@@ -21,6 +20,51 @@ jobs:
       with:
         node-version: '20.16.0'
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - run: cd chat-service && npm ci
+    - run: cd chat-service && npm run build --if-present
+    - run: cd chat-service && npm test
+    
+  notification-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.16.0'
+        cache: 'npm'
+    - run: cd notification-service && npm ci
+    - run: cd notification-service && npm run build --if-present
+    - run: cd notification-service && npm test
+    
+  user-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.16.0'
+        cache: 'npm'
+    - run: cd user-service && npm ci
+    - run: cd user-service && npm run build --if-present
+    - run: cd user-service && npm test
+    
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.16.0'
+        cache: 'npm'
+    - run: cd frontend && npm ci
+    - run: cd frontend && npm test
+    - run: cd frontend && npm run build
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build
+        path: frontend/build
+    
